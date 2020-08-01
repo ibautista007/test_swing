@@ -36,7 +36,7 @@ public class test extends JFrame {
 
 
         Class.forName("com.mysql.jdbc.Driver");
-        con1 = DriverManager.getConnection("jdbc:mysql://localhost:3308/inventory","root","");
+        con1 = DriverManager.getConnection("jdbc:mysql://localhost/inventory","root","");
 
 
         if(e.getSource()==button1) {
@@ -208,7 +208,7 @@ public class test extends JFrame {
         PreparedStatement query;
         Class.forName("com.mysql.jdbc.Driver");
 
-        Connection con1=DriverManager.getConnection("jdbc:mysql://localhost:3308/inventory","root","");
+        Connection con1=DriverManager.getConnection("jdbc:mysql://localhost/inventory","root","");
 
         query = con1.prepareStatement("SELECT * FROM category");
 
