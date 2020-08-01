@@ -20,8 +20,87 @@ public class test extends JFrame {
         initComponents();
     }
 
-    private void button1ActionPerformed(ActionEvent e) {
+    Connection con1;
+    PreparedStatement insert;
+
+
+    private void button1ActionPerformed(ActionEvent e) throws ClassNotFoundException, SQLException {
         // TODO add your code here
+        String catcode, catdesc;
+
+
+
+        catcode = textField1.getText();
+        catdesc = textField2.getText();
+
+
+
+        Class.forName("com.mysql.jdbc.Driver");
+        con1 = DriverManager.getConnection("jdbc:mysql://localhost:3308/inventory","root","");
+
+
+        if(e.getSource()==button1) {
+
+
+            insert = con1.prepareStatement("Select * from category where catcode = ?");
+
+            insert.setString(1, catcode);
+
+
+
+            ResultSet rs = insert.executeQuery();
+
+            if(rs.isBeforeFirst()){          //res.isBeforeFirst() is true if the cursor
+
+                JOptionPane.showMessageDialog(null,"The catcode you are trying to enter already exists ");
+
+                textField1.setText("");
+                textField2.setText("");
+                textField1.requestFocus();
+
+                return;
+            }
+
+
+            insert = con1.prepareStatement("insert into category values(?,?)");
+
+            insert.setString(1, catcode);
+            insert.setString(2, catdesc);
+
+            insert.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Record added");
+
+            textField1.setText("");
+            textField2.setText("");
+            textField1.requestFocus();
+
+
+
+
+
+            updateTable();
+
+
+        }
+
+
+        if(e.getSource()==table1) {
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
     }
 
     private void initComponents() {
@@ -88,7 +167,15 @@ public class test extends JFrame {
 
         //---- button1 ----
         button1.setText("Add");
-        button1.addActionListener(e -> button1ActionPerformed(e));
+        button1.addActionListener(e -> {
+            try {
+                button1ActionPerformed(e);
+            } catch (ClassNotFoundException classNotFoundException) {
+                classNotFoundException.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
         contentPane.add(button1, "cell 1 14");
 
         //---- button2 ----
@@ -121,7 +208,7 @@ public class test extends JFrame {
         PreparedStatement query;
         Class.forName("com.mysql.jdbc.Driver");
 
-        Connection con1=DriverManager.getConnection("jdbc:mysql://localhost/inventory","root","");
+        Connection con1=DriverManager.getConnection("jdbc:mysql://localhost:3308/inventory","root","");
 
         query = con1.prepareStatement("SELECT * FROM category");
 
